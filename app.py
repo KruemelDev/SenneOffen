@@ -6,7 +6,14 @@ app = Flask(__name__)
 
 @app.route('/json')
 def is_open_json():
-    return jsonify({"message": scrape.scrape()})
+    message: str = scrape.scrape()
+    senne_open: bool = True
+    if 'Transit Roads Closed' in message:
+        senne_open = False
+
+    return jsonify({"message": message, "isOpen": senne_open})
+
+
 @app.route('/')
 def is_open():
     return scrape.scrape()
