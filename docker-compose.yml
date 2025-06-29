@@ -1,0 +1,7 @@
+services:
+  api:
+    container_name: "SenneOpen"
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:80"
