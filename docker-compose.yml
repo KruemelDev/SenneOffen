@@ -1,7 +1,19 @@
 services:
   api:
-    container_name: "SenneOpen"
-    build: .
+    container_name: "SenneOpenApp"
+    build: ./app
     restart: unless-stopped
     ports:
       - "80:80"
+    volumes:
+      - ./opentimes:/usr/src/app/opentimes
+      - ./app/src/main/:/usr/src/app/
+    depends_on:
+      - cron
+  cron:
+    container_name: "SenneOpenTimesCron"
+    build: ./cron
+    restart: unless-stopped
+    volumes:
+    - ./opentimes:/usr/src/app/opentimes
+    - ./cron/src/main/:/usr/src/app/

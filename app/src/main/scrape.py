@@ -1,21 +1,19 @@
-import requests
 from bs4 import BeautifulSoup
 
 
 def scrape(date):
-    response = requests.get('https://bfgnet.de/sennelager-range-access')
-    if response.status_code != 200:
-        return SenneInfo("Could not load information", False, date)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    try:
-        newest_table_row = soup.find(string=date)
-    except IndexError:
-        return SenneInfo("error", False, date)
+    table_date: str
+    with open('opentimes/opentimes', 'r') as f:
+        soup = BeautifulSoup(f.read(), 'html.parser')
+        try:
+            table_date = soup.find(string=date)
+        except IndexError:
+            return SenneInfo("error", False, date)
 
     open_text: str
-    if newest_table_row:
+    if table_date:
         try:
-            open_text = newest_table_row.parent.parent.find_all("td")[2].text
+            open_text = table_date.parent.parent.find_all("td")[2].text
         except IndexError:
             return SenneInfo("error", False, date)
     else:

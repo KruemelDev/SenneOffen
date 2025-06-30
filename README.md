@@ -1,2 +1,2 @@
 ## Setup
-- Create venv, activate it and run [requirements.txt](requirements.txt)
+- Create venv, activate it and run [requirements.txt](app/requirements.txt)
