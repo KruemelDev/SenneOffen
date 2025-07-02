@@ -15,7 +15,7 @@ def is_open_json():
     senne_info: SenneInfo
     date: str
     if date == "" or not check_valid_date(date):
-        return redirect(f"/json?date={datetime.today().strftime('%d-%b-%y')}")
+        senne_info = scrape.scrape(datetime.today().strftime('%d-%b-%y'))
     else:
         senne_info = scrape.scrape(date)
 
@@ -26,7 +26,7 @@ def is_open_json():
 def is_open():
     date = request.args.get('date')
     if date == "" or not check_valid_date(date):
-        return redirect(f"/?date={datetime.today().strftime('%d-%b-%y')}")
+        return scrape.scrape(datetime.today().strftime('%d-%b-%y')).message
     return scrape.scrape(date).message
 
 
