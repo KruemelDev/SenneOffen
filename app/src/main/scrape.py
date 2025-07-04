@@ -1,4 +1,7 @@
+import datetime
+
 from bs4 import BeautifulSoup
+from SenneInfo import SenneInfo
 
 
 def scrape(date):
@@ -19,15 +22,43 @@ def scrape(date):
     else:
         return SenneInfo("error", False, date)
 
-    senne_open: bool = True
-    if 'Transit Roads Closed' in open_text:
-        senne_open = False
-
+    senne_open: bool = get_senne_open(open_text)
     return SenneInfo(open_text, senne_open, date)
 
 
-class SenneInfo:
-    def __init__(self, message: str, is_open: bool, date: str):
-        self.message = message
-        self.is_open = is_open
-        self.date = date
+# !Note!: Always the current time will be used to validate senne open for the specific date
+def get_senne_open(message: str) -> bool:
+    senne_open: bool = True
+    time = datetime.datetime.now()
+    current_time: str = str(time.hour) + str(time.minute)
+
+    from_time: str
+    until_time: str
+    if 'from' in message and 'until' in message:
+        split_message = message.split('from')[1].split(' ')
+        try:
+            from_time = split_message[1][:4]
+            until_time = split_message[6][:4]
+        except IndexError:
+            return False
+
+        # Check if senne is closed at specific time
+        if in_time_frame(int(current_time), int(from_time), int(until_time)) and "Closed" in message:
+            senne_open = False
+    elif 'until' in message:
+        split_message = message.split('until')[1].split(' ')
+        try:
+            from_time = "0000"
+            until_time = split_message[1][:4]
+        except IndexError:
+            return False
+
+        if in_time_frame(int(current_time), int(from_time), int(until_time)) and "Closed" in message:
+            senne_open = False
+    elif 'Transit Roads Closed' in message:
+        senne_open = False
+    return senne_open
+
+
+def in_time_frame(current_time: int, from_time: int, until_time: int) -> bool:
+    return from_time <= current_time <= until_time

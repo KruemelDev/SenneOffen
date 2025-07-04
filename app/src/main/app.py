@@ -9,7 +9,7 @@ app = Flask(__name__)
 # dateformat: dd-mmm-yy -> 01-Jun-25
 
 
-@app.route('/json', methods=['GET'])
+@app.route('/ha', methods=['GET'])
 def is_open_json():
     date = request.args.get('date')
     senne_info: SenneInfo
