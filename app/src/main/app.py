@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, redirect
 import scrape
 from scrape import SenneInfo
 
+
 app = Flask(__name__)
 
 
@@ -11,6 +12,7 @@ app = Flask(__name__)
 
 @app.route('/ha', methods=['GET'])
 def is_open_json():
+    print("qwerqwerqwrewqer")
     date = request.args.get('date')
     senne_info: SenneInfo
     date: str

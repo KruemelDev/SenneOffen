@@ -6,7 +6,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./opentimes:/usr/src/app/opentimes
+      - opentimes:/opentimes
       - ./app/src/main/:/usr/src/app/
     depends_on:
       - cron
@@ -15,5 +15,8 @@ services:
     build: ./cron
     restart: unless-stopped
     volumes:
-    - ./opentimes:/usr/src/app/opentimes
+    - opentimes:/opentimes
     - ./cron/src/main/:/usr/src/app/
+
+volumes:
+  opentimes:

@@ -1,5 +1,6 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 import requests
+import os
 
 schedule = BlockingScheduler()
 
@@ -16,7 +17,8 @@ def fetch_opentimes():
     if response.status_code != 200:
         print("could not fetch")
         return
-    with open('opentimes/opentimes', 'w') as f:
+
+    with open('/opentimes/opentimes', 'w') as f:
         f.write(response.content.decode('utf-8'))
 
 
